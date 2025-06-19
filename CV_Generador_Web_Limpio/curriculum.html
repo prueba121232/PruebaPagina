@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Currículum Profesional</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <div class="cv-container" id="cv">
+    <!-- Aquí se generará el CV -->
+  </div>
+  
+  <div class="cv-actions">
+    <button id="print-cv"><i class="fas fa-print"></i> Imprimir</button>
+    <button id="download-pdf"><i class="fas fa-file-pdf"></i> Descargar PDF</button>
+    <button id="edit-cv"><i class="fas fa-edit"></i> Editar</button>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const data = JSON.parse(localStorage.getItem('cvData'));
+      const cvContainer = document.getElementById('cv');
+      
+      if (data) {
+        // Generar HTML del CV
+        let cvHTML = `
+          <div class="cv-header">
+            ${data.foto ? `<img src="${data.foto}" alt="Foto de perfil" class="cv-photo">` : 
+              `<div class="cv-photo"><i class="fas fa-user-circle"></i></div>`}
+            <div class="cv-title">
+              <h1>${data.nombre}</h1>
+              <h2>${data.profesion}</h2>
+              <div class="cv-contact">
+                ${data.correo ? `<div class="cv-contact-item"><i class="fas fa-envelope"></i> ${data.correo}</div>` : ''}
+                ${data.telefono ? `<div class="cv-contact-item"><i class="fas fa-phone"></i> ${data.telefono}</div>` : ''}
+                ${data.direccion ? `<div class="cv-contact-item"><i class="fas fa-map-marker-alt"></i> ${data.direccion}</div>` : ''}
+                ${data.web ? `<div class="cv-contact-item"><i class="fas fa-globe"></i> ${data.web}</div>` : ''}
+              </div>
+            </div>
+          </div>
+          
+          <div class="cv-section">
+            <h3><i class="fas fa-user-tie"></i> Perfil Profesional</h3>
+            <div class="cv-profile">${data.perfil.replace(/\n/g, '<br>')}</div>
+          </div>
+          
+          <div class="cv-section">
+            <h3><i class="fas fa-briefcase"></i> Experiencia Laboral</h3>
+        `;
+        
+        data.experiencias.forEach(exp => {
+          cvHTML += `
+            <div class="cv-experience-item">
+              <div class="cv-job-title">${exp.puesto}</div>
+              <div class="cv-company">${exp.empresa}</div>
+              <div class="cv-date">${formatDate(exp.inicio)} - ${exp.actual ? 'Presente' : formatDate(exp.fin)}</div>
+              <div class="cv-job-description">${exp.descripcion.replace(/\n/g, '<br>')}</div>
+            </div>
+          `;
+        });
+        
+        cvHTML += `
+          </div>
+          
+          <div class="cv-section">
+            <h3><i class="fas fa-graduation-cap"></i> Formación Académica</h3>
+        `;
+        
+        data.formaciones.forEach(edu => {
+          cvHTML += `
+            <div class="cv-education-item">
+              <div class="cv-degree">${edu.titulo}</div>
+              <div class="cv-institution">${edu.institucion}</div>
+              <div class="cv-date">${formatDate(edu.fin, true)}</div>
+            </div>
+          `;
+        });
+        
+        cvHTML += `
+          </div>
+          
+          <div class="cv-section">
+            <h3><i class="fas fa-lightbulb"></i> Habilidades</h3>
+            <div class="cv-skills">
+        `;
+        
+        data.habilidades.forEach(skill => {
+          cvHTML += `
+            <div class="cv-skill-container" style="width: 100%; margin-bottom: 15px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <span>${skill.nombre}</span>
+                <span>${getSkillLevelText(skill.nivel)}</span>
+              </div>
+              <div class="skill-bar-container">
+                <div class="skill-bar" style="width: ${skill.nivel}%;"></div>
+              </div>
+            </div>
+          `;
+        });
+        
+        cvHTML += `
+            </div>
+          </div>
+          
+          <div class="cv-section">
+            <h3><i class="fas fa-globe"></i> Idiomas</h3>
+            <div class="cv-languages">
+        `;
+        
+        data.idiomas.forEach(lang => {
+          cvHTML += `
+            <div class="cv-language">
+              <div class="cv-language-name">${lang.nombre}</div>
+              <div class="cv-language-level">${lang.nivel}</div>
+            </div>
+          `;
+        });
+        
+        cvHTML += `
+            </div>
+          </div>
+        `;
+        
+        cvContainer.innerHTML = cvHTML;
+      } else {
+        cvContainer.innerHTML = `
+          <div class="cv-error">
+            <h2>No se encontraron datos del currículum</h2>
+            <p>Por favor, completa el formulario para generar tu CV.</p>
+            <a href="formulario.html" class="cv-back-btn"><i class="fas fa-arrow-left"></i> Volver al formulario</a>
+          </div>
+        `;
+      }
+      
+      // Funciones auxiliares
+      function formatDate(dateString, yearOnly = false) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        if (yearOnly) {
+          return date.getFullYear();
+        }
+        const options = { year: 'numeric', month: 'long' };
+        return date.toLocaleDateString('es-ES', options);
+      }
+      
+      function getSkillLevelText(level) {
+        if (level >= 90) return 'Experto';
+        if (level >= 70) return 'Avanzado';
+        if (level >= 40) return 'Intermedio';
+        return 'Básico';
+      }
+      
+      // Manejar botones de acción
+      document.getElementById('print-cv').addEventListener('click', function() {
+        window.print();
+      });
+      
+      document.getElementById('edit-cv').addEventListener('click', function() {
+        window.location.href = 'formulario.html';
+      });
+      
+      document.getElementById('download-pdf').addEventListener('click', function() {
+        alert('Para descargar como PDF, usa la función de impresión de tu navegador y selecciona "Guardar como PDF".');
+      });
+    });
+  </script>
+</body>
+</html>

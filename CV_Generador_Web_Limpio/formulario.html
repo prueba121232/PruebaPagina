@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de CV Profesional</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <div class="form-container">
+    <div class="form-header">
+      <h1><i class="fas fa-file-alt"></i> Generador de CV Profesional</h1>
+      <p>Crea un currículum atractivo en minutos</p>
+    </div>
+    
+    <form id="cv-form" enctype="multipart/form-data">
+      <div class="form-grid">
+        <div class="form-section">
+          <h2><i class="fas fa-user"></i> Información Personal</h2>
+          <div class="photo-upload">
+            <div class="photo-preview" id="photo-preview">
+              <i class="fas fa-user-circle"></i>
+              <span>Sin foto</span>
+            </div>
+            <label class="upload-btn">
+              <input type="file" id="foto" accept="image/*">
+              <i class="fas fa-camera"></i> Subir foto
+            </label>
+          </div>
+          <label>Nombre completo*
+            <input type="text" id="nombre" placeholder="Ej. Ana López" required>
+          </label>
+          <label>Profesión*
+            <input type="text" id="profesion" placeholder="Ej. Diseñadora Gráfica" required>
+          </label>
+          <label>Correo electrónico*
+            <input type="email" id="correo" placeholder="ejemplo@correo.com" required>
+          </label>
+          <label>Teléfono*
+            <input type="tel" id="telefono" placeholder="Ej. 600123456" required>
+          </label>
+          <label>Dirección
+            <input type="text" id="direccion" placeholder="Ej. Calle Ejemplo 123, Ciudad">
+          </label>
+          <label>LinkedIn/Portafolio
+            <input type="url" id="web" placeholder="https://linkedin.com/tuperfil">
+          </label>
+        </div>
+
+        <div class="form-section">
+          <h2><i class="fas fa-briefcase"></i> Experiencia Profesional</h2>
+          <div id="experiencia-container">
+            <div class="exp-item">
+              <label>Puesto*
+                <input type="text" class="exp-puesto" placeholder="Ej. Desarrollador Frontend" required>
+              </label>
+              <label>Empresa*
+                <input type="text" class="exp-empresa" placeholder="Nombre de la empresa" required>
+              </label>
+              <div class="date-range">
+                <label>Fecha inicio*
+                  <input type="month" class="exp-inicio" required>
+                </label>
+                <label>Fecha fin
+                  <input type="month" class="exp-fin">
+                </label>
+                <label class="current-checkbox">
+                  <input type="checkbox" class="exp-actual"> Actualmente trabajando aquí
+                </label>
+              </div>
+              <label>Descripción*
+                <textarea class="exp-descripcion" rows="3" placeholder="Describe tus responsabilidades y logros" required></textarea>
+              </label>
+            </div>
+          </div>
+          <button type="button" class="add-btn" id="add-experiencia">
+            <i class="fas fa-plus"></i> Añadir experiencia
+          </button>
+        </div>
+
+        <div class="form-section">
+          <h2><i class="fas fa-graduation-cap"></i> Formación Académica</h2>
+          <div id="formacion-container">
+            <div class="edu-item">
+              <label>Título*
+                <input type="text" class="edu-titulo" placeholder="Ej. Grado en Informática" required>
+              </label>
+              <label>Institución*
+                <input type="text" class="edu-institucion" placeholder="Nombre de la universidad/centro" required>
+              </label>
+              <div class="date-range">
+                <label>Año de finalización*
+                  <input type="month" class="edu-fin" required>
+                </label>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="add-btn" id="add-formacion">
+            <i class="fas fa-plus"></i> Añadir formación
+          </button>
+        </div>
+
+        <div class="form-section">
+          <h2><i class="fas fa-lightbulb"></i> Habilidades</h2>
+          <div id="habilidades-container">
+            <div class="skill-item">
+              <input type="text" class="skill-nombre" placeholder="Ej. JavaScript">
+              <select class="skill-nivel">
+                <option value="100">Experto</option>
+                <option value="75" selected>Avanzado</option>
+                <option value="50">Intermedio</option>
+                <option value="25">Básico</option>
+              </select>
+              <button type="button" class="remove-skill"><i class="fas fa-times"></i></button>
+            </div>
+          </div>
+          <button type="button" class="add-btn" id="add-habilidad">
+            <i class="fas fa-plus"></i> Añadir habilidad
+          </button>
+        </div>
+
+        <div class="form-section">
+          <h2><i class="fas fa-user-tie"></i> Perfil Profesional</h2>
+          <textarea id="perfil" rows="5" placeholder="Describe brevemente tu experiencia, habilidades y objetivos profesionales..." required></textarea>
+        </div>
+
+        <div class="form-section">
+          <h2><i class="fas fa-globe"></i> Idiomas</h2>
+          <div id="idiomas-container">
+            <div class="language-item">
+              <input type="text" class="lang-nombre" placeholder="Ej. Inglés">
+              <select class="lang-nivel">
+                <option value="Nativo">Nativo</option>
+                <option value="Avanzado">Avanzado</option>
+                <option value="Intermedio" selected>Intermedio</option>
+                <option value="Básico">Básico</option>
+              </select>
+              <button type="button" class="remove-lang"><i class="fas fa-times"></i></button>
+            </div>
+          </div>
+          <button type="button" class="add-btn" id="add-idioma">
+            <i class="fas fa-plus"></i> Añadir idioma
+          </button>
+        </div>
+      </div>
+
+      <div class="form-footer">
+        <button type="submit" class="generate-btn">
+          <i class="fas fa-file-download"></i> Generar CV
+        </button>
+        <button type="button" id="reset-form" class="reset-btn">
+          <i class="fas fa-redo"></i> Reiniciar formulario
+        </button>
+      </div>
+    </form>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
